@@ -8,7 +8,7 @@ using namespace std;
 
 using ll = long long;
 
-const ll NUMEROUS = LLONG_MAX;
+const ll NUMEROUS = ULONG_MAX;
 
 ll countPartitions(vector<int>& nums) {
     int n = nums.size();
@@ -18,6 +18,19 @@ ll countPartitions(vector<int>& nums) {
     }
 
     if (sum % 2 != 0) { // 전체 합이 짝수가 아니면 불가능
+        return 0;
+    }
+
+    // sum 이 0 일때
+    if (sum == 0) {
+        cout << "{ ";
+        for (int i = 0; i < n; i++) {
+            cout << nums[i];
+            if (i != n - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " } { }\n";
         return 0;
     }
 
@@ -41,7 +54,7 @@ ll countPartitions(vector<int>& nums) {
 
     ll ans = dp[n][sum];
     if (ans == 0) { // 불가능한 경우
-        cout << "No same-sum partition found. Closest-sum partition: ";
+        //cout << "No same-sum partition found. Closest-sum partition: ";
         // 두 subset의 합의 차이를 최소화하는 partition 출력
         vector<ll> subset1, subset2;
         int s1 = 0, s2 = 0;
@@ -80,8 +93,8 @@ ll countPartitions(vector<int>& nums) {
     }
     else {
         // 가능한 경우, 한 개 이상의 partition을 찾아 출력
-        cout << "Number of partitions: " << ans << "\n";
-        cout << "Possible partitions:\n";
+        cout << /*"Number of partitions: " << */ans << "\n";
+        //cout << "Possible partitions:\n";
         vector<int> p1, p2;
         int s = sum;
         for (int i = n - 1; i >= 0; i--) {
