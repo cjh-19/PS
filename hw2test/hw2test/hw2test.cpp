@@ -29,7 +29,8 @@ int main() {
     return 0;
 }
 
-ll findMin(vector<int>& nums) {
+ll findMin(vector<int>& nums)
+{
     int n = nums.size();
     // Calculate sum of all elements
     int sum = 0;
@@ -37,12 +38,8 @@ ll findMin(vector<int>& nums) {
         sum += nums[i];
 
     // Create an array to store results of subproblems
-    bool** dp = new bool*[n + 1];
-    for (int i = 0; i < n; i++) {
-        dp[i] = new bool[sum + 1];
-    }
     //bool dp[n + 1][sum + 1];
-    //vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1));
+    vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1));
 
     // Initialize first column as true. 0 sum is possible
     // with all elements.
@@ -62,12 +59,12 @@ ll findMin(vector<int>& nums) {
 
             // If i'th element is included
             if (nums[i - 1] <= j)
-                dp[i][j] |= dp[i - 1][j - nums[i - 1]];
+                dp[i][j] = dp[i][j] || dp[i - 1][j - nums[i - 1]];
         }
     }
 
     // Initialize difference of two sums.
-    ll diff = ULONG_MAX;
+    int diff = INT_MAX;
 
     // Find the largest j such that dp[n][j]
     // is true where j loops from sum/2 t0 0
@@ -75,55 +72,108 @@ ll findMin(vector<int>& nums) {
         // Find the
         if (dp[n][j] == true) {
             diff = sum - 2 * j;
-
-            vector<int> p1, p2;
-            int s = sum;
-            for (int i = n - 1; i >= 0; i--) {
-                if (nums[i] < 0) {
-                    if (s >= -nums[i] && dp[i][s + nums[i]] == true) { // 현재 원소를 p1에 넣을 수 있는 경우
-                        p1.push_back(nums[i]);
-                        s += nums[i];
-                    }
-                    else { // 넣을 수 없는 경우 p
-                        p2.push_back(nums[i]);
-                    }
-                }
-                else {
-                    if (s >= nums[i] && dp[i][s - nums[i]] == true) { // 현재 원소를 p1에 넣을 수 있는 경우
-                        p1.push_back(nums[i]);
-                        s -= nums[i];
-                    }
-                    else { // 넣을 수 없는 경우 p
-                        p2.push_back(nums[i]);
-                    }
-                }
-            }
-            sort(p1.begin(), p1.end());
-            sort(p2.begin(), p2.end());
-            cout << "{ ";
-            for (int i = 0; i < p1.size(); i++) {
-                cout << p1[i];
-                if (i != p1.size() - 1) {
-                    cout << ", ";
-                }
-            }
-            cout << " } { ";
-            for (int i = 0; i < p2.size(); i++) {
-                cout << p2[i];
-                if (i != p2.size() - 1) {
-                    cout << ", ";
-                }
-            }
-            cout << " }\n";
             break;
         }
     }
-    for (int i = 0; i < n; i++)
-        delete[] dp[i];
-    delete[] dp;
-
+    cout << diff << "\n";
     return diff;
 }
+
+//ll findMin(vector<int>& nums) {
+//    int n = nums.size();
+//    // Calculate sum of all elements
+//    int sum = 0;
+//    for (int i = 0; i < n; i++)
+//        sum += nums[i];
+//
+//    // Create an array to store results of subproblems
+//    bool** dp = new bool*[n + 1];
+//    for (int i = 0; i < n; i++) {
+//        dp[i] = new bool[sum + 1];
+//    }
+//    //bool dp[n + 1][sum + 1];
+//    //vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1));
+//
+//    // Initialize first column as true. 0 sum is possible
+//    // with all elements.
+//    for (int i = 0; i <= n; i++)
+//        dp[i][0] = true;
+//
+//    // Initialize top row, except dp[0][0], as false. With
+//    // 0 elements, no other sum except 0 is possible
+//    for (int i = 1; i <= sum; i++)
+//        dp[0][i] = false;
+//
+//    // Fill the partition table in bottom up manner
+//    for (int i = 1; i <= n; i++) {
+//        for (int j = 1; j <= sum; j++) {
+//            // If i'th element is excluded
+//            dp[i][j] = dp[i - 1][j];
+//
+//            // If i'th element is included
+//            if (nums[i - 1] <= j)
+//                dp[i][j] |= dp[i - 1][j - nums[i - 1]];
+//        }
+//    }
+//
+//    // Initialize difference of two sums.
+//    ll diff = ULONG_MAX;
+//
+//    // Find the largest j such that dp[n][j]
+//    // is true where j loops from sum/2 t0 0
+//    for (int j = sum / 2; j >= 0; j--) {
+//        // Find the
+//        if (dp[n][j] == true) {
+//            diff = sum - 2 * j;
+//            /*
+//            vector<int> p1, p2;
+//            int s = sum;
+//            for (int i = n - 1; i >= 0; i--) {
+//                if (nums[i] < 0) {
+//                    if (s >= -nums[i] && dp[i][s + nums[i]] == true) { // 현재 원소를 p1에 넣을 수 있는 경우
+//                        p1.push_back(nums[i]);
+//                        s += nums[i];
+//                    }
+//                    else { // 넣을 수 없는 경우 p
+//                        p2.push_back(nums[i]);
+//                    }
+//                }
+//                else {
+//                    if (s >= nums[i] && dp[i][s - nums[i]] == true) { // 현재 원소를 p1에 넣을 수 있는 경우
+//                        p1.push_back(nums[i]);
+//                        s -= nums[i];
+//                    }
+//                    else { // 넣을 수 없는 경우 p
+//                        p2.push_back(nums[i]);
+//                    }
+//                }
+//            }
+//            sort(p1.begin(), p1.end());
+//            sort(p2.begin(), p2.end());
+//            cout << "{ ";
+//            for (int i = 0; i < p1.size(); i++) {
+//                cout << p1[i];
+//                if (i != p1.size() - 1) {
+//                    cout << ", ";
+//                }
+//            }
+//            cout << " } { ";
+//            for (int i = 0; i < p2.size(); i++) {
+//                cout << p2[i];
+//                if (i != p2.size() - 1) {
+//                    cout << ", ";
+//                }
+//            }
+//            cout << " }\n";*/
+//            break;
+//        }
+//    }
+//    for (int i = 0; i < n; i++)
+//        delete[] dp[i];
+//    delete[] dp;
+//    cout << diff << "\n";
+//    return diff;
+//}
 
 ll countPartitions(vector<int>& nums) {
     int n = nums.size();
@@ -192,9 +242,9 @@ ll countPartitions(vector<int>& nums) {
     //헷갈림 잘 확인할 것
     if (ans == 0 || tmp % 2 != 0) { // 불가능한 경우, 합이 홀수인경우
         cout << "No same-sum partition found. Closest-sum partition: ";
-        findMin(nums);
+        //findMin(nums);
         // 두 subset의 합의 차이를 최소화하는 partition 출력
-        /*vector<ll> subset1, subset2;
+        vector<ll> subset1, subset2;
         int s1 = 0, s2 = 0;
         if (tmp < 0) {
             for (int i = 0; i <= n - 1; i++) {
@@ -237,7 +287,7 @@ ll countPartitions(vector<int>& nums) {
             }
         }
         cout << " }\n";
-        return 0;*/
+        return 0;
     }
     else if (ans > NUMEROUS) {
         cout << "NUMEROUS\n";
@@ -1060,3 +1110,533 @@ ll countPartitions(vector<int>& nums) {
 //	}
 //	
 //}*/
+
+
+//minimum partition 코드
+
+//pair<vector<int>, vector<int>> partition2(vector<int>& nums) {
+//    int n = nums.size();
+//    int sum = 0;
+//    for (int num : nums) {
+//        sum += num;
+//    }
+//
+//    // dp[i][j] = whether it is possible to get sum j with elements from 0 to i
+//    vector<vector<bool>> dp(n, vector<bool>(sum + 1, false));
+//
+//    // base case
+//    dp[0][nums[0] + sum] = true;
+//    dp[0][-nums[0] + sum] = true;
+//
+//    // dp
+//    for (int i = 1; i < n; i++) {
+//        for (int j = -sum; j <= sum; j++) {
+//            if (dp[i - 1][j + sum]) {
+//                dp[i][j + nums[i] + sum] = true;
+//                dp[i][j - nums[i] + sum] = true;
+//            }
+//        }
+//    }
+//
+//    // find the closest partition
+//    int closest_sum = 0;
+//    for (int j = 0; j <= sum; j++) {
+//        if (dp[n - 1][j]) {
+//            closest_sum = j;
+//            break;
+//        }
+//    }
+//
+//    // construct the partitions
+//    vector<int> partition1, partition2;
+//    int i = n - 1;
+//    int j = closest_sum;
+//    while (i >= 0) {
+//        if (j - nums[i] >= -sum && dp[i - 1][j - nums[i] + sum]) {
+//            partition1.push_back(nums[i]);
+//            j -= nums[i];
+//        }
+//        else {
+//            partition2.push_back(nums[i]);
+//        }
+//        i--;
+//    }
+//
+//    return make_pair(partition1, partition2);
+//}
+
+
+
+
+
+
+//pair<vector<int>, vector<int>> minAbsDifference(vector<int>& nums) {
+//    int n = nums.size();
+//    int sum = 0;
+//    for (int i = 0; i < n; i++) {
+//        sum += nums[i];
+//    }
+//
+//    int target = sum / 2;
+//    vector<vector<int>> dp(n + 1, vector<int>(target + 1, 0));
+//    for (int i = 1; i <= n; i++) {
+//        for (int j = 0; j <= target; j++) {
+//            if (nums[i - 1] <= j) {
+//                dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - nums[i - 1]] + nums[i - 1]);
+//            }
+//            else {
+//                dp[i][j] = dp[i - 1][j];
+//            }
+//        }
+//    }
+//
+//    int diff = abs(sum - 2 * dp[n][target]);
+//    vector<int> set1, set2;
+//    int i = n, j = target;
+//    while (i > 0 && j >= 0) {
+//        if (dp[i][j] == dp[i - 1][j]) {
+//            set2.push_back(nums[i - 1]);
+//        }
+//        else {
+//            set1.push_back(nums[i - 1]);
+//            j -= nums[i - 1];
+//        }
+//        i--;
+//    }
+//    while (i > 0) {
+//        set2.push_back(nums[i - 1]);
+//        i--;
+//    }
+//
+//    cout << "Set 1: ";
+//    for (int i = 0; i < set1.size(); i++) {
+//        cout << set1[i] << " ";
+//    }
+//    cout << endl;
+//    cout << "Set 2: ";
+//    for (int i = 0; i < set2.size(); i++) {
+//        cout << set2[i] << " ";
+//    }
+//    cout << endl;
+//
+//    return make_pair(set1, set2);
+//}
+
+
+
+
+
+
+
+//vector<int> findPartition(vector<int>& nums) {
+//    int n = nums.size();
+//    int min_value = *min_element(nums.begin(), nums.end()); // 최소값 찾기
+//
+//    // 모든 값에서 최소값 빼기
+//    for (int i = 0; i < n; i++) {
+//        nums[i] -= min_value;
+//    }
+//
+//    int target = accumulate(nums.begin(), nums.end(), 0) / 2; // 목표 합 구하기
+//    vector<bool> dp(target + 1, false);
+//    vector<int> result;
+//
+//    dp[0] = true;
+//    for (int num : nums) {
+//        for (int j = target; j >= num; j--) {
+//            dp[j] = dp[j] || dp[j - num];
+//        }
+//    }
+//
+//    int i = target;
+//    while (!dp[i]) {
+//        i--;
+//    }
+//
+//    int sum1 = i, sum2 = accumulate(nums.begin(), nums.end(), 0) - sum1;
+//    int diff = abs(sum1 - sum2);
+//
+//    // 결과 벡터 구하기
+//    for (int num : nums) {
+//        if (sum1 >= num) {
+//            result.push_back(num + min_value);
+//            sum1 -= num;
+//        }
+//        else {
+//            sum2 -= num;
+//        }
+//    }
+//    cout << "Partition 1: ";
+//    for (int x : result) {
+//        cout << x << " ";
+//    }
+//    cout << endl;
+//
+//    cout << "Partition 2: ";
+//    for (int x : nums) {
+//        if (find(result.begin(), result.end(), x) == result.end()) {
+//            cout << x << " ";
+//        }
+//    }
+//    cout << endl;
+//
+//    return result;
+//}
+
+
+
+
+
+
+//void minimumAbsDifference(vector<int>& nums) {
+//    int n = nums.size();
+//    int sum = 0;
+//    int sum_neg = 0, sum_pos = 0, count = 0;
+//    for (auto val : nums)
+//    {
+//        if (val < 0)
+//            sum_neg += val;
+//        else
+//            sum_pos += val;
+//    }
+//    sum = sum_pos + sum_neg;
+//
+//    // dp[i][j] = true if there is a subset of elements that has a sum of j among the first i elements of the nums array
+//    //vector<vector<bool>> dp(n + 1, vector<bool>(sum / 2 + 1, false));
+//    unordered_map<int, bool>* dp = new unordered_map<int, bool>[n];
+//    dp[0][nums[0]] = true;
+//
+//    // compute the dp table
+//    for (int i = 1; i < n; i++) {
+//        for (int j = sum_neg; j <= sum_pos; j++) {
+//            dp[i][j] = dp[i - 1][j];  // case 1: do not include the i-th element in the subset
+//            if (j - nums[i - 1] >= sum_neg) {
+//                dp[i][j] = dp[i][j] || dp[i - 1][j - nums[i - 1]];  // case 2: include the i-th element in the subset
+//            }
+//        }
+//    }
+//
+//    // find the largest index j such that dp[n][j] = true
+//    int j = sum / 2;
+//    while (!dp[n - 1][j]) {
+//        j--;
+//    }
+//
+//    // construct the two subsets
+//    vector<int> set1, set2;
+//    int i = n;
+//    while (i > 0 && j > 0) {
+//        if (dp[i - 1][j]) {  // case 1: the i-th element is not in the subset
+//            i--;
+//        }
+//        else {  // case 2: the i-th element is in the subset
+//            set1.push_back(nums[i - 1]);
+//            j -= nums[i - 1];
+//            i--;
+//        }
+//    }
+//    while (i > 0) {
+//        set1.push_back(nums[i - 1]);
+//        i--;
+//    }
+//
+//    // compute the second subset
+//    for (int k = 0; k < n; k++) {
+//        if (find(set1.begin(), set1.end(), nums[k]) == set1.end()) {
+//            set2.push_back(nums[k]);
+//        }
+//    }
+//
+//    cout << "[ ";
+//    for (auto num : set1) {
+//        cout << num << " ";
+//    }
+//    cout << "] and [ ";
+//    for (auto num : set2) {
+//        cout << num << " ";
+//    }
+//    cout << "]" << endl;
+//
+//    return;
+//}
+
+
+
+
+
+
+//void findMinDiff(vector<int>& nums) {
+//    int n = nums.size();
+//
+//    int sum_neg = 0, sum_pos = 0, count = 0;
+//    for (auto val : nums)
+//    {
+//        if (val < 0)
+//            sum_neg += val;
+//        else
+//            sum_pos += val;
+//    }
+//
+//    // Total sum of the array.
+//    // 모든 항목의 합
+//    int sum = sum_pos + sum_neg;
+//    //int sum = accumulate(nums.begin(), nums.end(), 0);
+//
+//    vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1, false));
+//
+//    for (int i = 0; i <= n; i++) {
+//        dp[i][0] = true;
+//    }
+//
+//    for (int i = 1; i <= n; i++) {
+//        for (int j = sum_neg; j <= sum_pos; j++) {
+//            dp[i][j] = dp[i - 1][j];
+//            if (nums[i - 1] <= j) {
+//                dp[i][j] = dp[i][j] || dp[i - 1][j - nums[i - 1]];
+//            }
+//        }
+//    }
+//
+//    int diff = sum;
+//    int first_set_sum = 0;
+//    for (int j = sum / 2; j >= 0; j--) {
+//        if (dp[n][j]) {
+//            first_set_sum = j;
+//            break;
+//        }
+//    }
+//
+//    int second_set_sum = sum - first_set_sum;
+//    diff = abs(first_set_sum - second_set_sum);
+//
+//    vector<int> first_set;
+//    vector<int> second_set;
+//    int i = n;
+//    int j = second_set_sum;
+//    while (i > 0 && j > 0) {
+//        if (dp[i - 1][j]) {
+//            i--;
+//        }
+//        else {
+//            first_set.push_back(nums[i - 1]);
+//            j -= nums[i - 1];
+//            i--;
+//        }
+//    }
+//
+//    for (int k = n - 1; k >= 0; k--) {
+//        if (find(first_set.begin(), first_set.end(), nums[k]) == first_set.end()) {
+//            second_set.push_back(nums[k]);
+//        }
+//    }
+//
+//    cout << "First Set: ";
+//    for (int x : first_set) {
+//        cout << x << " ";
+//    }
+//    cout << endl;
+//
+//    cout << "Second Set: ";
+//    for (int x : second_set) {
+//        cout << x << " ";
+//    }
+//    cout << endl;
+//}
+
+
+
+
+
+//int partition(vector<int>& nums) {
+//    int n = nums.size() / 2;
+//
+//    // Calculate the sum of all elements in nums
+//    int sum = accumulate(nums.begin(), nums.end(), 0);
+//
+//    // dp[i][j] stores whether it is possible to obtain a sum of j using the first i elements of nums
+//    vector<vector<bool>> dp(n + 1, vector<bool>(sum / 2 + 1, false));
+//
+//    // Base case: it is always possible to obtain a sum of 0 using 0 elements
+//    dp[0][0] = true;
+//
+//    // Fill in the remaining entries of the dp table
+//    for (int i = 1; i <= 2 * n; i++) {
+//        for (int j = min(i, n); j >= 1; j--) {
+//            for (int k = sum / 2; k >= nums[i - 1]; k--) {
+//                dp[j][k] = dp[j][k] || dp[j - 1][k - nums[i - 1]];
+//            }
+//        }
+//    }
+//
+//    // Find the largest j such that dp[j][sum/2] is true
+//    int j;
+//    for (j = n; j >= 0; j--) {
+//        if (dp[j][sum / 2]) {
+//            break;
+//        }
+//    }
+//
+//    // Construct the two sets that give the minimum possible absolute difference
+//    vector<int> set1, set2;
+//    int currSum = sum / 2;
+//    for (int i = 2 * n; i >= 1; i--) {
+//        if (j > 0 && currSum - nums[i - 1] >= 0 && dp[j - 1][currSum - nums[i - 1]]) {
+//            set1.push_back(nums[i - 1]);
+//            j--;
+//            currSum -= nums[i - 1];
+//        }
+//        else {
+//            set2.push_back(nums[i - 1]);
+//            currSum -= nums[i - 1];
+//        }
+//    }
+//
+//    // Print the two sets
+//    cout << "Set 1: ";
+//    for (int i = 0; i < n; i++) {
+//        cout << set1[i] << " ";
+//    }
+//    cout << "\nSet 2: ";
+//    for (int i = 0; i < n; i++) {
+//        cout << set2[i] << " ";
+//    }
+//    cout << "\n";
+//    return 0;
+//}
+
+
+
+
+
+
+//부분집합으로 나누지 못할 때 최소값 출력하는 함수
+//vector<vector<int>> partitionArray(vector<int>& nums) {
+//    int n = nums.size() / 2;
+//    vector<int> bitmask(n, 1);
+//    bitmask.resize(nums.size(), 0);
+//
+//    int min_diff = INT_MAX;
+//    vector<int> ans1, ans2;
+//
+//    do {
+//        vector<int> set1, set2;
+//        for (int i = 0; i < nums.size(); i++) {
+//            if (bitmask[i] == 1) {
+//                set1.push_back(nums[i]);
+//            }
+//            else {
+//                set2.push_back(nums[i]);
+//            }
+//        }
+//        int sum1 = accumulate(set1.begin(), set1.end(), 0);
+//        int sum2 = accumulate(set2.begin(), set2.end(), 0);
+//        int diff = abs(sum1 - sum2);
+//        if (diff < min_diff) {
+//            min_diff = diff;
+//            ans1 = set1;
+//            ans2 = set2;
+//        }
+//    } while (prev_permutation(bitmask.begin(), bitmask.end()));
+//
+//    sort(ans1.begin(), ans1.end());
+//    sort(ans2.begin(), ans2.end());
+//
+//    if (ans1[0] < ans2[0]) {
+//        cout << 0 << "\n" << "{ ";
+//        for (int i = 0; i < ans1.size(); i++) {
+//            cout << ans1[i];
+//            if (i != ans1.size() - 1) {
+//                cout << ", ";
+//            }
+//        }
+//        cout << " } { ";
+//        for (int i = 0; i < ans2.size(); i++) {
+//            cout << ans2[i];
+//            if (i != ans2.size() - 1) {
+//                cout << ", ";
+//            }
+//        }
+//        cout << " }\n";
+//    }
+//    else {
+//        cout << 0 << "\n" << "{ ";
+//        for (int i = 0; i < ans2.size(); i++) {
+//            cout << ans2[i];
+//            if (i != ans2.size() - 1) {
+//                cout << ", ";
+//            }
+//        }
+//        cout << " } { ";
+//        for (int i = 0; i < ans1.size(); i++) {
+//            cout << ans1[i];
+//            if (i != ans1.size() - 1) {
+//                cout << ", ";
+//            }
+//        }
+//        cout << " }\n";
+//    }
+//
+//    vector<vector<int>> ans;
+//    ans.push_back(ans1);
+//    ans.push_back(ans2);
+//    return ans;
+//}
+
+
+
+
+
+
+
+/*
+// Returns the minimum value of the difference of the two
+// sets.
+int findMin(vector<int>& nums)
+{
+    int n = nums.size();
+    // Calculate sum of all elements
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+        sum += nums[i];
+
+    // Create an array to store results of subproblems
+    //bool dp[n + 1][sum + 1];
+    vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1));
+
+    // Initialize first column as true. 0 sum is possible
+    // with all elements.
+    for (int i = 0; i <= n; i++)
+        dp[i][0] = true;
+
+    // Initialize top row, except dp[0][0], as false. With
+    // 0 elements, no other sum except 0 is possible
+    for (int i = 1; i <= sum; i++)
+        dp[0][i] = false;
+
+    // Fill the partition table in bottom up manner
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= sum; j++) {
+            // If i'th element is excluded
+            dp[i][j] = dp[i - 1][j];
+
+            // If i'th element is included
+            if (nums[i - 1] <= j)
+                dp[i][j] = dp[i][j] || dp[i - 1][j - nums[i - 1]];
+        }
+    }
+
+    // Initialize difference of two sums.
+    int diff = INT_MAX;
+
+    // Find the largest j such that dp[n][j]
+    // is true where j loops from sum/2 t0 0
+    for (int j = sum / 2; j >= 0; j--) {
+        // Find the
+        if (dp[n][j] == true) {
+            diff = sum - 2 * j;
+            break;
+        }
+    }
+    cout << diff << "\n";
+    return diff;
+}*/
