@@ -8,7 +8,9 @@ F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(362,24)
 F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(495,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(659,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(871,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(920,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(1152,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(1263,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(921,23): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(973,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(1109,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(1375,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\test2\test2.cpp(1486,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   test2.vcxproj -> F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test2\x64\Debug\test2.exe
