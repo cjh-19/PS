@@ -8,10 +8,253 @@
 #include <numeric>
 #include <string>
 #include <map>
+#include <cmath>
 
 using namespace std;
 
 const long long NUMEROUS = ULONG_MAX;
+
+int minimumDifference2(vector<int>& nums) {
+    int totalSum = accumulate(begin(nums), end(nums), 0);
+    int n = nums.size();
+
+    int totLengthOfSubarray = (n / 2) - 1 - 0 + 1;
+    vector<vector<int>> res1(totLengthOfSubarray + 1); //길이+1의 res 2차원 벡터생성
+    for (int i = 0; i < (1 << totLengthOfSubarray); i++) {
+        int sum = 0, countOfChosenNos = 0;
+        for (int j = 0; j < totLengthOfSubarray; j++) {
+            if (i & (1 << j)) {
+                sum += nums[j];
+                countOfChosenNos++;
+            }
+        }
+        res1[countOfChosenNos].push_back(sum);
+    }
+    auto left = res1;
+
+    totLengthOfSubarray = (n - 1) - (n / 2) + 1;
+    vector<vector<int>> res2(totLengthOfSubarray + 1); //길이+1의 res 2차원 벡터생성
+    for (int i = 0; i < (1 << totLengthOfSubarray); i++) {
+        int sum = 0, countOfChosenNos = 0;
+        for (int j = 0; j < totLengthOfSubarray; j++) {
+            if (i & (1 << j)) {
+                sum += nums[n / 2 + j];
+                countOfChosenNos++;
+            }
+        }
+        res2[countOfChosenNos].push_back(sum);
+    }
+    auto right = res2;
+
+
+
+    //iterator 사용, 훨씬 빨라짐
+    int target = totalSum / 2, ans = INT_MAX;
+
+    vector<int> L, R;
+
+    //we can take (0 to n/2) length numbers from left
+    for (int i = 0; i <= n / 2; i++) {
+        //now we take rest - (n/2-i) length from right, we sort it to binary search
+        auto r = right[n / 2 - i];
+        sort(begin(r), end(r));
+        //curleftSum : left 부분집합에서 가능한 모든 합
+        for (int curleftSum : left[i]) {
+            int needSumFromRight = target - curleftSum;
+            auto it = lower_bound(begin(r), end(r), needSumFromRight); //needSumFromRight를 찾기 위해 이분탐색을 한다
+            if (it != end(r)) {
+                int curAns = abs(totalSum - 2 * (curleftSum + *it));
+                
+                if (curAns < ans) {
+                    ans = curAns;
+                    L.clear();
+                    R.clear();
+                    L = vector<int>(begin(nums), begin(nums) + (n / 2 - i));
+                    R = vector<int>(begin(nums) + (n / 2 - i), end(nums));
+                }
+            }
+        }
+    }
+
+
+
+
+
+    if (L[0] < R[0]) {
+        cout << "{ ";
+        for (int i = 0; i < L.size(); i++) {
+            cout << L[i];
+            if (i != L.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " } { ";
+        for (int i = 0; i < R.size(); i++) {
+            cout << R[i];
+            if (i != R.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " }\n";
+    }
+    else {
+        cout << "{ ";
+        for (int i = 0; i < R.size(); i++) {
+            cout << R[i];
+            if (i != R.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " } { ";
+        for (int i = 0; i < L.size(); i++) {
+            cout << L[i];
+            if (i != L.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " }\n";
+    }
+
+
+    cout << "Minimum possible absolute difference: " << ans << "\n";
+    return ans;
+}
+
+vector<vector<int>> minimizeDifference(vector<int>& nums) {
+    int n = nums.size();
+    int totalSum = accumulate(nums.begin(), nums.end(), 0);
+    int targetSum = abs((totalSum + 1) / 2);
+
+    vector<vector<int>> dp(n + 1, vector<int>(abs(totalSum) + 1));
+    for (int i = 0; i <= n; i++) {
+        dp[i][0] = 1;
+    }
+    for (int i = 1; i <= n; i++) {
+        for (int j = 0; j <= abs(totalSum); j++) {
+            dp[i][j] = dp[i - 1][j];
+            if (j >= nums[i - 1]) {
+                dp[i][j] |= dp[i - 1][j - nums[i - 1]];
+            }
+        }
+    }
+
+    int minDiff = INT_MAX, sum1 = 0;
+    for (int j = targetSum; j <= abs(totalSum); j++) {
+        if (dp[n][j]) {
+            int diff = abs(totalSum - 2 * j);
+            if (diff < minDiff) {
+                minDiff = diff;
+                sum1 = j;
+            }
+        }
+    }
+    vector<int> s1, s2;
+    vector<vector<int>> result(2);
+    int i = n;
+    while (i > 0 && sum1 > 0) {
+        if (sum1 >= nums[i - 1] && dp[i - 1][sum1 - nums[i - 1]]) {
+            s1.push_back(nums[i - 1]);
+            sum1 -= nums[i - 1];
+        }
+        else {
+            s2.push_back(nums[i - 1]);
+        }
+        i--;
+    }
+    while (i > 0) {
+        s2.push_back(nums[i - 1]);
+        i--;
+    }
+    cout << "{ ";
+    for (int i = 0; i < s1.size(); i++) {
+        cout << s1[i];
+        if (i != s1.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << " } { ";
+    for (int i = 0; i < s2.size(); i++) {
+        cout << s2[i];
+        if (i != s2.size() - 1) {
+            cout << ", ";
+        }
+    }
+    cout << " }\n";
+    return result;
+}
+
+void minAbsoluteDiff(vector<int>& nums) {
+    int n = nums.size();
+    int totalSum = accumulate(nums.begin(), nums.end(), 0);
+    int target = abs(totalSum);
+
+    vector<vector<bool>> dp(n + 1, vector<bool>(target + 1, false));
+    dp[0][0] = true;
+
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 0; j <= target; ++j) {
+            if (j >= abs(nums[i - 1])) {
+                dp[i][j] = dp[i - 1][j] || dp[i - 1][j - abs(nums[i - 1])];
+            }
+            else {
+                dp[i][j] = dp[i - 1][j];
+            }
+        }
+    }
+
+    int halfSum = target / 2;
+    while (!dp[n][halfSum] && halfSum >= 0) --halfSum;
+    int set1Sum = halfSum;
+    int set2Sum = totalSum - set1Sum;
+
+    vector<int> s1, s2;
+    for (int i = n; i >= 1; --i) {
+        if (set1Sum >= abs(nums[i - 1]) && dp[i - 1][set1Sum - abs(nums[i - 1])]) {
+            set1Sum -= abs(nums[i - 1]);
+            s1.push_back(nums[i - 1]);
+        }
+        else {
+            s2.push_back(nums[i - 1]);
+        }
+    }
+    // 만약 전체 합이 음수였다면, set1과 set2를 바꿔준다.
+    if (totalSum < 0) swap(s1, s2);
+    if (s1[0] < s2[0]) {
+        cout << "{ ";
+        for (int i = 0; i < s1.size(); i++) {
+            cout << s1[i];
+            if (i != s1.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " } { ";
+        for (int i = 0; i < s2.size(); i++) {
+            cout << s2[i];
+            if (i != s2.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " }\n";
+    }
+    else {
+        cout << "{ ";
+        for (int i = 0; i < s2.size(); i++) {
+            cout << s2[i];
+            if (i != s2.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " } { ";
+        for (int i = 0; i < s1.size(); i++) {
+            cout << s1[i];
+            if (i != s1.size() - 1) {
+                cout << ", ";
+            }
+        }
+        cout << " }\n";
+    }
+    return ;
+}
 
 int findMin2(vector<int>& nums)
 {
@@ -176,7 +419,7 @@ int findMin(vector<int>& nums) {
     // Allocate a 2D array for calculating DP
     //bool** part = new bool* [sum / 2 + 1];
     //vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1));
-    unordered_map<int, bool>* dp = new unordered_map<int, bool>[n + 1];
+    unordered_map<int, bool>* dp = new unordered_map<int, bool>[n];
 
     // Initialize top row as true
     /*for (int i = 0; i <= n; i++)
@@ -189,7 +432,7 @@ int findMin(vector<int>& nums) {
     dp[0][nums[0]] = true;
 
     // Fill the partition table in bottom up manner 
-    for (int i = 1; i <= n; i++)
+    for (int i = 1; i < n; i++)
     {
         //dp[i][0] = true;
         for (int j = sum_neg; j <= sum_pos; j++)
@@ -199,8 +442,8 @@ int findMin(vector<int>& nums) {
                 dp[i][j] = true;
                 //cout << dp[i][j] << " ";
             }*/
-            if (j - nums[i - 1] >= sum_neg) {
-                dp[i][j] |= dp[i - 1][j - nums[i - 1]];
+            if (j - nums[i] >= sum_neg) {
+                dp[i][j] |= dp[i - 1][j - nums[i]];
                 //cout << dp[i][j] << " ";
             }
         }
@@ -249,12 +492,39 @@ int findMin(vector<int>& nums) {
     return 0;
     */
 
+
+    int diff = 0;
+    for (int i = sum / 2; i >= sum_neg; i--) {
+        if (dp[n][i]) {
+            diff = sum - 2 * i;
+            break;
+        }
+    }
+
+    vector<int> s1, s2;
+    int sum1 = 0, sum2 = 0;
+    for (int i = n - 1; i >= 0; i--) {
+        if (dp[i][diff + sum / 2]) {
+            s1.push_back(nums[i]);
+            sum1 += nums[i];
+            diff -= nums[i];
+        }
+        else {
+            s2.push_back(nums[i]);
+            sum2 += nums[i];
+        }
+    }
+    if (sum1 > sum2) {
+        //swap(s1, 2);
+    }
+
     // 집합의 인덱스 체크
-    vector<bool> result_subset(nums.size(), 0);
-    int required = sum / 2;
-    int idx = n - 1;
-    int diff = INT_MAX;
-    int cnt = 0;
+    //vector<bool> result_subset(nums.size(), 0);
+    //int required = sum / 2;
+    //int idx = n - 1;
+    //int diff = INT_MAX;
+    //int cnt = 0;
+    //int check =0;
     //for (int j = required; j >= sum_neg; j--)
     //{
     //    if (dp[idx][j] == true)
@@ -281,42 +551,48 @@ int findMin(vector<int>& nums) {
     //            }
     //            idx--;
     //        }
-    //        break;
+    //        //break;
     //    }
+    //    check++;
+    //}
+    
+
+
+    //int tmp = 0;
+    //for (int j = required; j >= sum_neg; j--)
+    //{
+    //    idx = n - 1;
+    //    tmp = j;
+    //    if (dp[idx][tmp] == true) {
+    //        diff = sum - 2 * (tmp+check);
+    //        while (idx >= 0)
+    //        {
+    //            if (idx != 0)
+    //            {
+    //                // Reverse dp transition.
+    //                if (dp[idx][tmp] && !dp[idx - 1][tmp])
+    //                {
+    //                    //diff = sum - 2 * tmp;
+    //                    result_subset[idx] = 1;
+    //                    cnt++;
+    //                    tmp -= nums[idx];
+    //                    if (tmp == 0)
+    //                        break;
+    //                }
+    //            }
+    //            else {
+    //                result_subset[idx] = 1;
+    //                cnt++;
+    //            }
+    //            idx--;
+    //        }
+    //        if (tmp == 0)
+    //            break;
+    //    }
+    //    check++;
     //}
 
-    for (int j = required; j >= sum_neg; j--)
-    {
-        idx = n - 1;
-        //if (dp[idx][j] == true) {
-            //diff = sum - 2 * j;
-        while (idx >= 0)
-        {
-            if (idx != 0)
-            {
-                // Reverse dp transition.
-                if (dp[idx][j] && !dp[idx - 1][j])
-                {
-                    diff = sum - 2 * j;
-                    result_subset[idx] = 1;
-                    cnt++;
-                    j -= nums[idx];
-                    if (j == 0)
-                        break;
-                }
-                else
-                    cnt++;
-            }
-            else
-                cnt++;
-            idx--;
-        }
-        if (cnt == n)
-            break;
-        //}
-    }
-
-    cout << diff << " \n";
+    //cout << diff << " \n";
     //return 0;
 
     // Tracks partition elements.
@@ -347,15 +623,15 @@ int findMin(vector<int>& nums) {
     }*/
 
     //인덱스의 값이 0인것을 s1, 1인 것을 s2에 추가
-    vector<int> s1, s2;
-    for (int i = 0; i < n; i++) {
-        //cout << result_subset[i] << " ";
-        if (result_subset[i] == 0)
-            s1.push_back(nums[i]);
-        else
-            s2.push_back(nums[i]);
+    //vector<int> s1, s2;
+    //for (int i = 0; i < n; i++) {
+    //    //cout << result_subset[i] << " ";
+    //    if (result_subset[i] == 0)
+    //        s1.push_back(nums[i]);
+    //    else
+    //        s2.push_back(nums[i]);
 
-    }
+    //}
     if (s1[0] < s2[0]) {
         cout << "{ ";
         for (int i = 0; i < s1.size(); i++) {
@@ -483,7 +759,10 @@ vector<bool> subset_sum_partition(vector<int>& nums)
     {
 
         //findMin(nums);//주요
-        findMin2(nums); //주요
+        //findMin2(nums); //주요
+        //minAbsoluteDiff(nums);
+        //minimizeDifference(nums);
+        minimumDifference2(nums);
         return vector<bool>();
     }
 
