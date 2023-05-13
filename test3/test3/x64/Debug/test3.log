@@ -1,8 +1,0 @@
-﻿  test3.cpp
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test3\test3\test3.cpp(19,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test3\test3\test3.cpp(124,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test3\test3\test3.cpp(187,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test3\test3\test3.cpp(262,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test3\test3\test3.cpp(405,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test3\test3\test3.cpp(705,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  test3.vcxproj -> F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\test3\x64\Debug\test3.exe

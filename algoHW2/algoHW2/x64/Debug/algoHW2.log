@@ -1,4 +1,0 @@
-﻿  HW2.cpp
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\algoHW2\algoHW2\HW2.cpp(14,28): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\algoHW2\algoHW2\HW2.cpp(102,24): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  algoHW2.vcxproj -> F:\3학년 1학기\알고리즘\과제2\SubSet-SUM\algoHW2\x64\Debug\algoHW2.exe
