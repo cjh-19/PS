@@ -1,3 +1,127 @@
+/// Scramble Square Puzzle Problem ///
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct PuzzlePiece {
+	vector<int> sides; // 각 면에 대한 값
+	int orientation; // 회전 상태
+
+	//PuzzlePiece(int orientation, const vector<int>& sides) : orientation(orientation), sides(sides) {}
+};
+
+bool nextLocal(int x, int width) {
+	if (x < width - 1)
+		return true;
+	return false;
+}
+
+int getSide(PuzzlePiece piece, int side) {
+	int num = piece.orientation;
+	return piece.sides[(num + side - 1) % 4];
+}
+
+// Promising 한지 검사하는 부분
+bool checkMove(const vector<vector<PuzzlePiece>>& puzzle, const PuzzlePiece& piece, int x, int y) { // x와 y는 현재 위치
+	if (x > 0) { // 왼쪽에 인접한 면이 있는 경우
+		//int side1 = puzzle[x - 1][y].sides[1]; // 오른쪽
+		//int side2 = piece.sides[3]; // 왼쪽
+		int side1 = getSide(puzzle[x - 1][y], 1);
+		int side2 = getSide(piece, 3);
+		if (side1 != side2)
+			return false;
+	}
+	if (y > 0) {
+		//int side1 = puzzle[x][y - 1].sides[2]; // 아래쪽
+		//int side2 = piece.sides[0]; // 위쪽
+		int side1 = getSide(puzzle[x][y - 1], 2);
+		int side2 = getSide(piece, 0);
+		if (side1 != side2)
+			return false;
+	}
+	return true;
+}
+
+bool solvePuzzle(vector<vector<PuzzlePiece>>& puzzle, vector<PuzzlePiece>& pieces, int x, int y, int& solutionCount) {
+	if (y == puzzle.size()) { // 해를 찾았을 경우 출력
+		solutionCount++;
+		if (solutionCount == 1)
+			cout << solutionCount << endl;
+		else
+			cout << endl;
+
+		for (const auto& row : puzzle) {
+			for (const auto& piece : row) {
+				cout << piece.orientation + 1 << "(" << piece.orientation << ") ";
+			}
+			cout << endl;
+		}
+		return true;
+	}
+
+	for (auto& piece : pieces) {
+		if (piece.orientation != 0) continue;
+
+		int curr_x = x;
+		int curr_y = y;
+
+		if (nextLocal(x, puzzle.size()))//(x < puzzle.size() - 1)
+			x++;
+		else {
+			y++;
+			x = 0;
+		}
+
+		for (int j = 0; j < 4; j++) {
+			piece.orientation = j;
+			if (checkMove(puzzle, piece, curr_x, curr_y)) {
+				if (curr_x < puzzle.size() && curr_y < puzzle.size())
+					puzzle[curr_x][curr_y] = piece;
+				if (solvePuzzle(puzzle, pieces, x, y, solutionCount))
+					return true;
+				else
+					piece.orientation = 0;
+			}
+		}
+	}
+	return false;
+}
+
+void findSolutions(vector<PuzzlePiece>& pieces, int width) {
+	vector<vector<PuzzlePiece>> puzzle(3, vector<PuzzlePiece>(3));
+	int solutionCount = 0;
+	solvePuzzle(puzzle, pieces, 0, 0, solutionCount);
+}
+
+int main() {
+	vector<PuzzlePiece> allPieces;
+	for (int i = 0; i < 9; i++) {
+		PuzzlePiece puzzlePiece;
+		for (int j = 0; j < 4; j++) {
+			int num;
+			cin >> num;
+			puzzlePiece.sides.push_back(num);
+		}
+		puzzlePiece.orientation = 0;
+		allPieces.push_back(puzzlePiece);
+	}
+
+	findSolutions(allPieces, 3);
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
 //#include <iostream>
 //#include <vector>
 //#include <array>
@@ -108,121 +232,7 @@
 
 
 
-// Scramble Square Puzzle Problem //
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
-struct PuzzlePiece {
-	vector<int> sides; // 각 면에 대한 값
-	int orientation; // 회전 상태
-
-	//PuzzlePiece(int orientation, const vector<int>& sides) : orientation(orientation), sides(sides) {}
-};
-
-bool nextLocal(int x, int width) {
-	if (x < width - 1)
-		return true;
-	return false;
-}
-
-int getSide(PuzzlePiece piece, int side) {
-	int num = piece.orientation;
-	return piece.sides[(num + side - 1) % 4];
-}
-
-// Promising 한지 검사하는 부분
-bool checkMove(const vector<vector<PuzzlePiece>>& puzzle, const PuzzlePiece& piece, int x, int y) { // x와 y는 현재 위치
-	if (x > 0) { // 왼쪽에 인접한 면이 있는 경우
-		//int side1 = puzzle[x - 1][y].sides[1]; // 오른쪽
-		//int side2 = piece.sides[3]; // 왼쪽
-		int side1 = getSide(puzzle[x - 1][y], 1);
-		int side2 = getSide(piece, 3);
-		if (side1 != side2)
-			return false;
-	}
-	if (y > 0) {
-		//int side1 = puzzle[x][y - 1].sides[2]; // 아래쪽
-		//int side2 = piece.sides[0]; // 위쪽
-		int side1 = getSide(puzzle[x][y - 1], 1);
-		int side2 = getSide(piece, 0);
-		if (side1 != side2)
-			return false;
-	}
-	return true;
-}
-
-bool solvePuzzle(vector<vector<PuzzlePiece>>& puzzle, vector<PuzzlePiece>& pieces, int x, int y, int& solutionCount) {
-	if (y == puzzle.size()) { // 해를 찾았을 경우 출력
-		solutionCount++;
-		if (solutionCount == 1)
-			cout << solutionCount << endl;
-		else
-			cout << endl;
-		
-		for (const auto& row : puzzle) {
-			for (const auto& piece : row) {
-				cout << piece.orientation + 1 << "(" << piece.orientation << ") ";
-			}
-			cout << endl;
-		}
-		return true;
-	}
-
-	for (auto& piece : pieces) {
-		if (piece.orientation != 0) continue;
-
-		int curr_x = x;
-		int curr_y = y;
-
-		if (nextLocal(x, puzzle.size()))//(x < puzzle.size() - 1)
-			x++;
-		else {
-			y++;
-			x = 0;
-		}
-
-		for (int j = 0; j < 4; j++) {
-			piece.orientation = j;
-			if (checkMove(puzzle, piece, curr_x, curr_y)) {
-				if (curr_x < puzzle.size() && curr_y < puzzle.size())
-					puzzle[curr_x][curr_y] = piece;
-				if (solvePuzzle(puzzle, pieces, x, y, solutionCount))
-					return true;
-				else
-					piece.orientation = 0;
-			}
-		}
-	}
-	return false;
-}
-
-void findSolutions(vector<PuzzlePiece>& pieces, int width) {
-	vector<vector<PuzzlePiece>> puzzle(3, vector<PuzzlePiece>(3));
-	int solutionCount = 0;
-	solvePuzzle(puzzle, pieces, 0, 0, solutionCount);
-}
-
-int main() {
-	vector<PuzzlePiece> allPieces;
-	for (int i = 0; i < 9; i++) {
-		PuzzlePiece puzzlePiece;
-		for (int j = 0; j < 4; j++) {
-			int num;
-			cin >> num;
-			puzzlePiece.sides.push_back(num);
-		}
-		puzzlePiece.orientation = 0;
-		allPieces.push_back(puzzlePiece);
-	}
-
-	findSolutions(allPieces, 3);
-
-	return 0;
-}
 
 
 
