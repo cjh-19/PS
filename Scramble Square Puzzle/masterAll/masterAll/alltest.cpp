@@ -9,6 +9,7 @@ struct Tile {
 	int rotation = 0;
 };
 
+int solution_count = 0;
 
 // 클래스 정의
 class Magic_Tiles {
@@ -21,6 +22,7 @@ public:
 	void rotateTile(int tileNum); // 타일을 시계 방향으로 회전
 	void conter_rotateTile(int tileNum); // 타일을 반시계 방향으로 회전
 	bool edgesMatch(int position); // 주변 타일의 가장자리와 값을 비교
+	void Six_case(Magic_Tiles puzzle);
 	~Magic_Tiles();
 
 private:
@@ -37,20 +39,19 @@ Magic_Tiles::Magic_Tiles() {
 		}
 		tileArray[i] = aTile;
 	}
-	cout << "Original Configuration: " << endl;
-	printBoard();
 	cout << endl;
 }
 
 void Magic_Tiles::solve(int index) {
-	if (found) // found라면 재귀를 종료하고 함수를 반환한다
+	if (found) { // found라면 재귀를 종료하고 함수를 반환한다
 		return;
+	}
 
 	// index 가 9에 도달하면 모든 비교는 참으로 되고 해가 발견된다.
 	// 결과를 출력하고 found를 참으로 하고 반환한다.
 	else if (index == 9) {
-		cout << "Solution 1 of 4: " << endl;
-		printBoard();
+		// 첫번째 솔루션 출력
+		solution_count++;
 		found = true;
 		return;
 	}
@@ -80,8 +81,9 @@ void Magic_Tiles::solve(int index) {
 			}
 
 			// 솔루션이 발견되면 즉시 반환
-			if (found)
+			if (found) {
 				return;
+			}
 			// 솔루션이 없으면 swap 호출하여 다음 타일로 진행
 			else
 				swap(index, i);
@@ -175,35 +177,6 @@ void Magic_Tiles::conter_rotateTile(int tileNum) {
 
 // 현재 배치하려는 타일의 가장자리(edge)를
 // "배치된" 이웃한 타일의 가장자리와 비교
-//bool Magic_Tiles::edgesMatch(int position) {
-//	// position(0) : 첫번째 위치는 비교할 것이 없다.
-//	// 1부터 8까지만 비교
-//	switch (position) {
-//
-//	case 1: return (tileArray[0].numArray[1] + tileArray[1].numArray[3] == 0); // 0번 우측 - 1번 좌측
-//
-//	case 2: return (tileArray[1].numArray[1] + tileArray[2].numArray[3] == 0); // 1번 우측 - 2번 좌측 
-//
-//	case 3: return (tileArray[0].numArray[2] + tileArray[3].numArray[0] == 0); // 0번 하단 - 3번 상단
-//
-//	case 4: return (tileArray[3].numArray[1] + tileArray[4].numArray[3] == 0)  // 3번 우측 - 4번 좌측
-//		&& (tileArray[1].numArray[2] + tileArray[4].numArray[0] == 0);		   // 1번 하단 - 4번 상단
-//
-//	case 5: return (tileArray[4].numArray[1] + tileArray[5].numArray[3] == 0)  // 4번 우측 - 5번 좌측
-//		&& (tileArray[2].numArray[2] + tileArray[5].numArray[0] == 0);		   // 2번 하단 - 5번 상단
-//
-//	case 6: return (tileArray[3].numArray[2] + tileArray[6].numArray[0] == 0); // 3번 하단 - 6번 상단
-//
-//	case 7: return (tileArray[6].numArray[1] + tileArray[7].numArray[3] == 0)  // 6번 우측 - 7번 좌측
-//		&& (tileArray[4].numArray[2] + tileArray[7].numArray[0] == 0);		   // 4번 하단 - 7번 상단
-//
-//	case 8: return (tileArray[7].numArray[1] + tileArray[8].numArray[3] == 0)  // 7번 우측 - 8번 좌측
-//		&& (tileArray[5].numArray[2] + tileArray[8].numArray[0] == 0);		   // 5번 하단 - 8번 상단
-//
-//	default: return true; // 가장자리 비교를 수행하지 않아도 되는 것은 true 반환
-//	}
-//}
-
 bool Magic_Tiles::edgesMatch(int position) {
 	// position(0) : 첫번째 위치는 비교할 것이 없다.
 	// 1부터 8까지만 비교
@@ -317,21 +290,90 @@ bool Magic_Tiles::edgesMatch(int position) {
 	}
 }
 
+void Magic_Tiles::Six_case(Magic_Tiles puzzle) {
+	Magic_Tiles Ptemp1 = puzzle;
+	// case 1
+	puzzle.solve(0);
+	for (int i = 1; i < 5; i++) {
+		puzzle.printBoard();
+		puzzle.rotateBoard();
+	}
+
+	// case 2
+	Ptemp1.swap(2, 4);
+	Ptemp1.swap(3, 7);
+	Ptemp1.swap(6, 8);
+	Magic_Tiles Ptemp2 = Ptemp1;
+	Ptemp1.solve(0);
+	for (int i = 1; i < 5; i++) {
+		Ptemp1.printBoard();
+		Ptemp1.rotateBoard();
+	}
+
+	// case 3
+	Ptemp2.swap(2, 6);
+	Ptemp2.swap(1, 9);
+	Ptemp2.swap(4, 8);
+	Magic_Tiles Ptemp3 = Ptemp2;
+	Ptemp2.solve(0);
+	for (int i = 1; i < 5; i++) {
+		Ptemp2.printBoard();
+		Ptemp2.rotateBoard();
+	}
+
+	// case 4
+	Ptemp3.swap(2, 4);
+	Ptemp3.swap(3, 7);
+	Ptemp3.swap(6, 8);
+	Magic_Tiles Ptemp4 = Ptemp3;
+	Ptemp3.solve(0);
+	for (int i = 1; i < 5; i++) {
+		Ptemp3.printBoard();
+		Ptemp3.rotateBoard();
+	}
+
+	// case 5
+	Ptemp4.swap(1, 7);
+	Ptemp4.swap(2, 8);
+	Ptemp4.swap(3, 9);
+	Magic_Tiles Ptemp5 = Ptemp4;
+	Ptemp4.solve(0);
+	for (int i = 1; i < 5; i++) {
+		Ptemp4.printBoard();
+		Ptemp4.rotateBoard();
+	}
+
+	// case 6
+	Ptemp5.swap(2, 6);
+	Ptemp5.swap(1, 9);
+	Ptemp5.swap(4, 8);
+	Magic_Tiles Ptemp6 = Ptemp5;
+	Ptemp5.solve(0);
+	for (int i = 1; i < 5; i++) {
+		Ptemp5.printBoard();
+		Ptemp5.rotateBoard();
+	}
+
+	return;
+}
+
 Magic_Tiles::~Magic_Tiles() {}
 
 
 int main() {
 	char moreSolutions;
 	Magic_Tiles puzzle;
-	puzzle.solve(0);
+	puzzle.Six_case(puzzle);
+	//puzzle.solve(0);
 
 	// 하나의 솔루션 당 보드를 회전하면 총 4개의 솔루션이 생김
 	// 보드를 회전시켜 각 솔루션 출력
-	for (int i = 2; i < 5; i++) {
-		cout << endl << "Solution " << i << " of 4:" << endl;
-		puzzle.rotateBoard();
-		puzzle.printBoard();
-	}
+	cout << solution_count * 4 << "\n";
+	//for (int i = 1; i < 5; i++) {
+	//	//cout << "\nSolution " << i << " of 4:\n";
+	//	puzzle.printBoard();
+	//	puzzle.rotateBoard();
+	//}
 
 	return 0;
 }
