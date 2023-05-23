@@ -1,0 +1,3 @@
+﻿  SSP.cpp
+F:\코딩연습\C++\ProblemSolving\PS\Scramble Square Puzzle\ScrambleSquarePuzzle\ScrambleSquarePuzzle\SSP.cpp(120): warning C4715: 'Board::solve': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  ScrambleSquarePuzzle.vcxproj -> F:\코딩연습\C++\ProblemSolving\PS\Scramble Square Puzzle\ScrambleSquarePuzzle\x64\Debug\ScrambleSquarePuzzle.exe
