@@ -1,3 +1,2 @@
-﻿  alltest.cpp
-F:\코딩연습\C++\ProblemSolving\PS\Scramble Square Puzzle\masterAll\masterAll\alltest.cpp(364,7): warning C4101: 'moreSolutions' :참조되지 않은 지역 변수입니다.
+﻿  test2.cpp
   masterAll.vcxproj -> F:\코딩연습\C++\ProblemSolving\PS\Scramble Square Puzzle\masterAll\x64\Debug\masterAll.exe
