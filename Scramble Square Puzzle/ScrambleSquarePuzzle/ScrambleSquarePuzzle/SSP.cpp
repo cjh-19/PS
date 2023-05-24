@@ -322,6 +322,9 @@ Board::~Board() {}
 
 
 int main() {
+	// 코드의 속도를 더 빠르게 하기 위한 작업
+	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
 	Board puzzle;
 	for (int i = 0; i < 9; i++) {
 		Puzzle tPuzzle;
