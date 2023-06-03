@@ -96,7 +96,7 @@ bool Board::solve(int index) {
 				// 첫 번째 퍼즐은 비교할 것이 없다
 				if (index == 0) {
 					if (!solve(index + 1)) {
-						rotatePuzzle(index);
+						counter_rotatePuzzle(index);
 					}
 				}
 				// 두 번째부터 아홉 번째 퍼즐의 경우
