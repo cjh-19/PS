@@ -1,32 +1,30 @@
 #include<iostream>
 #include<string>
-#include<vector>
 
 using namespace std;
 
 int main() {
 	ios_base::sync_with_stdio(0); cin.tie(0);
 	string str;
-	vector<char> rot;
 	getline(cin, str);
 	for (int i = 0; i < str.length(); i++) {
+		char ch = str[i];
 		if (str[i] >= 'A' && str[i] <= 'Z') {
-			int ch = str[i] + 13;
-			if (ch > 'Z')
-				ch = 'A' + (ch - 'Z') - 1;
-			rot.push_back(ch);
+			if (ch + 13 <= 'Z')
+				ch = ch + 13;
+			else if (ch + 13 > 'Z')
+				ch = ch - 13;
 		}
 		else if (str[i] >= 'a' && str[i] <= 'z') {
-			int ch = str[i] + 13;
-			if (ch > 'z')
-				ch = 'a' + (ch - 'z') - 1;
-			rot.push_back(ch);
+			if (ch + 13 <= 'z')
+				ch = ch + 13;
+			else if (ch + 13 > 'z')
+				ch = ch - 13;
 		}
-		else
-			rot.push_back(str[i]);
+		str[i] = ch;
 	}
-	for (int i = 0; i < rot.size(); i++) {
-		cout << rot[i];
+	for (int i = 0; i < str.length(); i++) {
+		cout << str[i];
 	}
 	cout << "\n";
 
