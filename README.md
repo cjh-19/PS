@@ -2,4 +2,4 @@
 
 - 알고리즘 문제 풀이 [C++]
 
-BOJ, Algorithm Homework
+BOJ, Algorithm Homework.
