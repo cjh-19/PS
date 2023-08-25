@@ -8,7 +8,9 @@ int main() {
 	int Num;
 	cin >> Num;
 	vector<int> dp;
-
+	for(int i=0; i<Num; i++){
+		dp.push_back();
+	}
 
 	return 0;
 }
