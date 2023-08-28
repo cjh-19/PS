@@ -9,9 +9,6 @@ int main() {
 	cin >> Num;
 	vector<int> dp;
 	for(int i=0; i<Num; i++){
-		while(1) {
-			
-		}
 		dp.push_back();
 	}
 
