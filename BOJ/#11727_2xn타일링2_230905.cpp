@@ -8,9 +8,12 @@ int main() {
 	int Num;
 	cin >> Num;
 	vector<int> dp;
-	for(int i=0; i<Num; i++){
-		dp.push_back();
+	dp.push_back(1);
+	dp.push_back(3);
+	for (int i = 2; i < Num; i++) {
+		dp.push_back((dp[i - 1] + 2 * dp[i - 2]) % 10007);
 	}
+	cout << dp[Num - 1] << "\n";
 
 	return 0;
 }
