@@ -19,8 +19,8 @@ int main() {
 	for (int i = 1; i <= Num; i++) {
 		dp.push_back(0);
 		for (int j = 0; j < i; j++) {
-			if (max < card[Num - j - 1] + dp[j]) {
-				max = card[Num - j - 1] + dp[j];
+			if (max < card[j] + dp[i - j - 1]) {
+				max = card[j] + dp[i - j - 1];
 				dp[i] = max;
 			}
 		}
