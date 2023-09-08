@@ -15,13 +15,13 @@ int main() {
 	}
 	vector<int> dp;
 	dp.push_back(0);
-	int max = 0;
 	for (int i = 1; i <= Num; i++) {
 		dp.push_back(0);
+		int min = 10000;
 		for (int j = 0; j < i; j++) {
-			if (max < card[j] + dp[i - j - 1]) {
-				max = card[j] + dp[i - j - 1];
-				dp[i] = max;
+			if (min > card[j] + dp[i - j - 1]) {
+				min = card[j] + dp[i - j - 1];
+				dp[i] = min;
 			}
 		}
 	}
