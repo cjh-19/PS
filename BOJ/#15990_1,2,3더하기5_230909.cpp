@@ -16,7 +16,6 @@ int main() {
 		dp.push_back(3);
 		dp.push_back(3);
 		dp.push_back(5);
-		dp.push_back(0);
 		for (int j = 5; j < num; j++) {
 			dp.push_back((dp[j - 1] + dp[j - 2] + dp[j - 3] - 3) % 1000000009);
 		}
