@@ -23,12 +23,6 @@ int main() {
 		}
 		dp[i]++;
 	}
-	int max = 0;
-	for (int i = 0; i < N; i++) {
-		if (max < dp[i])
-			max = dp[i];
-	}
-	cout << max << "\n";
 
 	return 0;
 }
