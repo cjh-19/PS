@@ -15,12 +15,13 @@ int main() {
 		arr.push_back(num);
 	}
 	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < i; j++) {
+		int j;
+		for (j = 0; j < i; j++) {
 			if (arr[i] > arr[j] && vt[i].size() < vt[j].size()) {
 				vt[i].push_back(arr[j]);
 			}
 		}
-		vt[i].push_back(arr[i]);
+		vt[i].push_back(arr[j]);
 	}
 	int max = 0, maxnum = 0;;
 	for (int i = 0; i < N; i++) {
