@@ -1,19 +1,26 @@
-#include<iostream>
-#include<vector>
+#include <stdio.h>
 
-using namespace std;
+#define MAX_ARR 100000
+#define max(x,y) x > y ? x : y
 
 int main() {
-	ios_base::sync_with_stdio(0); cin.tie(0);
-	int Num, n;
-	vector<int> arr;
-	vector<int> dp;
-
-	for (int i = 0; i < Num; i++) {
-		cin >> n;
-		arr.push_back(n);
+	int n;
+	int arr[MAX_ARR];
+	int dp[MAX_ARR];
+	scanf("%d", &n);
+	for (int i = 0; i < n; ++i) {
+		scanf("%d ", &arr[i]);
 	}
 
+	int ret = arr[0];
+	dp[0] = arr[0];
+
+	for (int i = 1; i < n; ++i) {
+		dp[i] = max(dp[i - 1] + arr[i], arr[i]);
+		ret = max(dp[i], ret);
+	}
+
+	printf("%d\n", ret);
 
 	return 0;
 }
