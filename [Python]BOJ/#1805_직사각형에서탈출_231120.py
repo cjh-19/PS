@@ -1,4 +1,2 @@
-x = int(input())
-y = int(input())
-w = int(input())
-h = int(input())
+x,y,w,h = map(int, input().split())
+print(min(w-x, h-y, x, y))
