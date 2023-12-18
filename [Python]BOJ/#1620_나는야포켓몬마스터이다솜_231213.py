@@ -5,4 +5,15 @@ input = sys.stdin.readline
 n, m = map(int, input().split())
 
 dict = {}
-# dict에 key-value 값으로 저장하는 방법을 시도
+
+for i in range(1, n + 1):
+    a = input().rstrip()
+    dict[i] = a
+    dict[a] = i
+
+for i in range(m):
+    quest = input().rstrip()
+    if quest.isdigit():
+        print(dict[int(quest)])
+    else:
+        print(dict[quest])
