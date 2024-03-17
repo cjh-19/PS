@@ -1,26 +1,36 @@
 #include<iostream>
 
-using namespace std;
+#define?endl?"\n"
 
-int main() {
-    ios_base::sync_with_stdio(0); cin.tie(0);
-    int e, s, m;
-    cin >> e >> s >> m;
+using?namespace?std;
 
-    int num = 1;
+int?E,?S,?M;
 
-    while (1) {
+void?Input(){
+	cin?>>?E?>>?S?>>?M;
+}
 
-        if ((num - e) % 15 == 0 && (num - s) % 28 == 0 && (num - m) % 19 == 0) {
-            break;
-        }
-        else num++;
+void?Solution(){
+	int?Year?=?1;
+	while?(1)
+	{
+		if?((Year?-?E)?%?15?==?0?&&?(Year?-?S)?%?28?==?0?&&?(Year?-?M)?%?19?==?0)
+			break;
+		Year++;
+	}
+	cout?<<?Year?<<?endl;
+}
 
-    }
+void?Solve(){
+	Input();
+	Solution();
+}
 
-
-    cout << num << "\n";
-
-    return 0;
-    }
+int?main(void){
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	
+	Solve();
+	return?0;
 }
