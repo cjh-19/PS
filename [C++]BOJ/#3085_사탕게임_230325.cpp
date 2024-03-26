@@ -1,13 +1,89 @@
-// 문제
-/*
-가장 처음에 N×N크기에 사탕을 채워 놓는다.
-사탕의 색은 모두 같지 않을 수도 있다.
-상근이는 사탕의 색이 다른 인접한 두 칸을 고른다.
-그 다음 고른 칸에 들어있는 사탕을 서로 교환한다.
-이제, 모두 같은 색으로 이루어져 있는 가장 긴 연속 부분(행 또는 열)을 고른 다음 그 사탕을 모두 먹는다.
+#include<iostream>
+#include<algorithm>
 
-사탕이 채워진 상태가 주어졌을 때, 상근이가 먹을 수 있는 사탕의 최대 개수를 구하는 프로그램 작성
+using namespace std;
 
-브루트 포스 - 완전 탐색 문제
-시간복잡도는 O(N^2)이고 N>=50이므로 브루트 포스 사용 가능
-*/
+// 최대 길이 (초기값은 문자 하나이므로 1)
+int maxCount = 1;
+
+// 열 체크
+void ColumnCheck(char arr[51][51], int size) {
+	for (int i = 0; i < size; i++) {
+		int count = 1;
+		for (int j = 0; j < size; j++) {
+			if (arr[i][j] == arr[i][j + 1]) {
+				count++;
+			}
+			else {
+				if (count > maxCount) {
+					maxCount = count;
+				}
+				count = 1;
+			}
+		}
+	}
+	return;
+}
+
+// 행 체크
+void LowCheck(char arr[51][51], int size) {
+	for (int i = 0; i < size; i++) {
+		int count = 1;
+		for (int j = 0; j < size; j++) {
+			if (arr[j][i] == arr[j + 1][i]) {
+				count++;
+			}
+			else {
+				if (count > maxCount) {
+					maxCount = count;
+				}
+				count = 1;
+			}
+		}
+	}
+}
+
+int main() {
+	ios_base::sync_with_stdio();
+	cin.tie(0);
+	cout.tie(0);
+
+	int N;
+	// 끝부분이 같아서 count를 늘렸을때,
+	//  다음 비어있는 곳과 비교해서 다르다는 것을 체크하고
+	//  maxCount를 최신화하기 위해서 크기를 51로 지정
+	char arr[51][51];
+
+	cin >> N;
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			cin >> arr[i][j];
+		}
+	}
+
+	// 완전 탐색
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N - 1; j++) {
+			// 가로 스위칭
+			swap(arr[i][j], arr[i][j + 1]);
+
+			ColumnCheck(arr, N);
+			LowCheck(arr, N);
+
+			swap(arr[i][j], arr[i][j + 1]); // 원복
+
+			// 세로 스위칭
+			swap(arr[j][j], arr[j + 1][i]);
+
+			ColumnCheck(arr, N);
+			LowCheck(arr, N);
+
+			swap(arr[j][j], arr[j + 1][i]); // 원복
+			;
+		}
+	}
+
+	cout << maxCount << endl;
+
+	return 0;
+}
