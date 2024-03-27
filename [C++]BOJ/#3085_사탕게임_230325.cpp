@@ -73,12 +73,12 @@ int main() {
 			swap(arr[i][j], arr[i][j + 1]); // 원복
 
 			// 세로 스위칭
-			swap(arr[j][j], arr[j + 1][i]);
+			swap(arr[j][i], arr[j + 1][i]);
 
 			ColumnCheck(arr, N);
 			LowCheck(arr, N);
 
-			swap(arr[j][j], arr[j + 1][i]); // 원복
+			swap(arr[j][i], arr[j + 1][i]); // 원복
 			;
 		}
 	}
