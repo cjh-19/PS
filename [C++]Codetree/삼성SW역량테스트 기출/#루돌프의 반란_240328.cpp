@@ -7,6 +7,14 @@ int main() {
 	cin.tie(0);
 	cout.tie(0);
 
+	int	n, m, p, c, d;
+	pair<int, int> rudolf;
+
+	cin >> n >> m >> p >> c >> d;
+	cin >> rudolf.first >> rudolf.second;
+
+
+
 
 	return 0;
 }
