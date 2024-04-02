@@ -57,6 +57,7 @@ int main() {
 		if (closestIdx) {
 			pair<int, int> prevRudolf = rudolf;
 
+			// 루돌프의 이동방향을 체크 (어느 방향으로 충돌될지 계산)
 			int moveX = 0;
 			if (closestX > rudolf.first) moveX = 1;
 			else if (closestX < rudolf.first) moveX = -1;
@@ -65,7 +66,28 @@ int main() {
 			if (closestY > rudolf.second) moveY = 1;
 			else if (closestY < rudolf.second) moveY = -1;
 
+			// 루돌프 위치 업데이트
+			rudolf.first += moveX;
+			rudolf.second += moveY;
+			board[prevRudolf.first][prevRudolf.second] = 0; // 기존 루돌프 위치 0으로 초기화
 
+			// 루돌프의 이동 -> 산타 충돌 -> 산타 이동
+			if (rudolf.first == closestX && rudolf.second == closestY) {
+				int firstX = closestX + moveX * c; // c만큼 moveX 방향으로 이동
+				int firstY = closestY + moveY * c; // c만큼 moveY 방향으로 이동
+
+				// 연쇄 충돌 대비 변수
+				int lastX = firstX;
+				int lastY = firstY;
+
+				stun[closestIdx] = i + 1; // 부딪힌 산타는 i+1 번째 턴까지 기절
+
+				// 연쇄적으로 충돌이 일어난 가장 마지막 위치에서 시작해서
+				// 순차적으로 보드판에 있는 산타를 한칸씩 이동
+				while (!(lastX == firstX && lastY == firstY)) {
+
+				}
+			}
 		}
 	}
 
