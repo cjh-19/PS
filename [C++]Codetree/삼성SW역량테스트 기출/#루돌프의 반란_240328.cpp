@@ -34,7 +34,39 @@ int main() {
 	// 게임 턴수 만큼 진행
 	for (int i = 0; i < m; i++) {
 		// 첫번재로는 루돌프에 가장 가까운 산타 찾기 (단, 생존 산타에서)
+		int closestX = 10000, closestY = 10000, closestIdx = 0;
 
+		// 살아있는 산타 중 루돌프에 가장 가까운 산타를 찾음
+		for (int j = 1; j <= p; j++) {
+			if (!alive[j]) continue; // 산타가 살아있지 않다면, 아래 과정 스킵
+
+			// currentBest : 이전에 가장 가까운 산타와 루돌프의 거리
+			// currentValue : 살아있는 산타들과 루돌프의 거리
+			pair<int, pair<int, int>> currentBest = { (closestX - rudolf.first) * (closestX - rudolf.first) - (closestY - rudolf.second) * (closestY - rudolf.second), {-closestX, -closestY} };
+			pair<int, pair<int, int>> currentValue = { (santa[j].first - rudolf.first) * (santa[j].first - rudolf.first) - (santa[j].second - rudolf.second) * (santa[j].second - rudolf.second), {-santa[j].first, -santa[j].second} };
+
+			// 가장 가까운 산타 번호와 산타 좌표 업데이트
+			if (currentBest > currentValue) {
+				closestX = santa[j].first;
+				closestY = santa[j].second;
+				closestIdx = j;
+			}
+		}
+
+		// 가장 가까운 산타의 방향으로 루돌프가 이동
+		if (closestIdx) {
+			pair<int, int> prevRudolf = rudolf;
+
+			int moveX = 0;
+			if (closestX > rudolf.first) moveX = 1;
+			else if (closestX < rudolf.first) moveX = -1;
+
+			int moveY = 0;
+			if (closestY > rudolf.second) moveY = 1;
+			else if (closestY < rudolf.second) moveY = -1;
+
+
+		}
 	}
 
 
