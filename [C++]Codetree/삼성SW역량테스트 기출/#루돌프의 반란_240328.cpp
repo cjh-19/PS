@@ -13,6 +13,11 @@ int board[MAX_N][MAX_N]; // 보드 위 루돌프 산타 좌표
 bool alive[MAX_P]; // 산타 생존 여부
 int stun[MAX_P]; // 산타 기절 종료 턴수
 
+// (x, y)가 보드 내의 좌표인지 확인하는 함수
+bool is_inrange(int x, int y) {
+	return 1 <= x && x <= n && 1 <= y && y <= n;
+}
+
 int main() {
 	ios_base::sync_with_stdio(0);
 	cin.tie(0);
@@ -85,7 +90,17 @@ int main() {
 				// 연쇄적으로 충돌이 일어난 가장 마지막 위치에서 시작해서
 				// 순차적으로 보드판에 있는 산타를 한칸씩 이동
 				while (!(lastX == firstX && lastY == firstY)) {
+					int beforeX = lastX - moveX;
+					int beforeY = lastY - moveY;
 
+					if (!is_inrange(beforeX, beforeY)) break; // 이동한 산타가 보드내에 있다면
+
+					int idx = board[beforeX][beforeY];
+
+					//
+					if (!is_inrange(lastX, lastY)) {
+						alive[idx] = false;
+					}
 				}
 			}
 		}
