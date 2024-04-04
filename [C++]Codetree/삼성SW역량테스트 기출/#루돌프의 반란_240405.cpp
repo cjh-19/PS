@@ -15,7 +15,7 @@ bool alive[MAX_P]; // 산타 생존 여부
 int stun[MAX_P]; // 산타 기절 종료 턴수
 
 // {좌, 상, 우, 하}
-const int dx[4] = { -1, 0. 1. 0 }; // 좌우 방향 벡터
+const int dx[4] = { -1, 0, 1, 0 }; // 좌우 방향 벡터
 const int dy[4] = { 0, 1, 0, -1 }; // 상하 방향 벡터
 
 // (x, y)가 보드 내의 좌표인지 확인하는 함수
@@ -33,7 +33,7 @@ int main() {
 	cin >> rudolf.first >> rudolf.second; // 루돌프 좌표 입력
 	board[rudolf.first][rudolf.second] = -1; // 보드에 루돌프 위치 표시
 
-	for (int i = 0; i < p; i++) {
+	for (int i = 1; i <= p; i++) {
 		int id; // 산타 번호
 		cin >> id;
 		cin >> santa[id].first >> santa[id].second; // 산타 좌표 입력
@@ -42,7 +42,7 @@ int main() {
 	}
 
 	// 게임 턴수 만큼 진행
-	for (int i = 0; i < m; i++) {
+	for (int i = 1; i <= m; i++) {
 		// 첫번재로는 루돌프에 가장 가까운 산타 찾기 (단, 생존 산타에서)
 		int closestX = 10000, closestY = 10000, closestIdx = 0;
 
@@ -52,8 +52,8 @@ int main() {
 
 			// currentBest : 이전에 가장 가까운 산타와 루돌프의 거리
 			// currentValue : 살아있는 산타들과 루돌프의 거리
-			pair<int, pair<int, int>> currentBest = { (closestX - rudolf.first) * (closestX - rudolf.first) - (closestY - rudolf.second) * (closestY - rudolf.second), {-closestX, -closestY} };
-			pair<int, pair<int, int>> currentValue = { (santa[j].first - rudolf.first) * (santa[j].first - rudolf.first) - (santa[j].second - rudolf.second) * (santa[j].second - rudolf.second), {-santa[j].first, -santa[j].second} };
+			pair<int, pair<int, int>> currentBest = { (closestX - rudolf.first) * (closestX - rudolf.first) + (closestY - rudolf.second) * (closestY - rudolf.second), {-closestX, -closestY} };
+			pair<int, pair<int, int>> currentValue = { (santa[j].first - rudolf.first) * (santa[j].first - rudolf.first) + (santa[j].second - rudolf.second) * (santa[j].second - rudolf.second), {-santa[j].first, -santa[j].second} };
 
 			// 가장 가까운 산타 번호와 산타 좌표 업데이트
 			if (currentBest > currentValue) {
@@ -133,7 +133,7 @@ int main() {
 				// 루돌프와 충돌한 루돌프와 가장 가까운 산타 점수 추가
 				point[closestIdx] += c;
 				santa[closestIdx] = { firstX, firstY }; // 첫번째 충돌 산타 위치 업데이트
-				if (is_range(firstX, firstY)) {
+				if (is_inrange(firstX, firstY)) {
 					board[firstX][firstY] = closestIdx; // 이동한 칸으로 산타 번호 변경
 				}
 				else { // 이동한 좌표가 보드 밖이면 산타 제거
@@ -168,8 +168,8 @@ int main() {
 
 				// 이동할 거리와 루돌프와의 거리
 				int dist = (nx - rudolf.first) * (nx - rudolf.first) + (ny - rudolf.second) * (ny - rudolf.second);
-				if (dist < minDist) {
-					minDist = dist;
+				if (dist < minDistance) {
+					minDistance = dist;
 					moveDir = dir;
 				}
 			}
@@ -177,6 +177,7 @@ int main() {
 			// 이동할 수 있어서 moveDir이 업데이트 된 경우
 			// 산타 이동
 			if (moveDir != -1) {
+				// {nx, ny} : 이동한 산타 좌표
 				int nx = santa[j].first + dx[moveDir];
 				int ny = santa[j].second + dy[moveDir];
 
@@ -196,9 +197,9 @@ int main() {
 					int lastY = firstY;
 
 					if (d == 1) { // d = 1 이라면 산타는 제자리로 돌아옴
-						points[j] += d;
+						point[j] += d;
 					}
-					else { 
+					else {
 						// 만약 이동한 위치에 산타가 있는 경우
 						// 연쇄적인 이동
 						// (lastX, lastY) : 마지막으로 충돌된 산타의 최종 위치
@@ -215,7 +216,7 @@ int main() {
 							int beforeY = lastY - moveY;
 
 							// 이동전에 보드 범위 바깥에 있었다면 while문 종료
-							if (!is_range(beforeX, beforeY))
+							if (!is_inrange(beforeX, beforeY))
 								break;
 
 							// 이동 전 위치에 있는 산타 번호
@@ -235,13 +236,36 @@ int main() {
 							lastY = beforeY;
 						}
 
+						// 첫번째로 부딪힌 산타 좌표 업데이트
 						point[j] += d; // 처음 부딪힌 산타 점수 추가
 						board[santa[j].first][santa[j].second] = 0; // 처음 부딪힌 산타 이동 전 위치 초기화
-						santa[]
+						santa[j] = { firstX, firstY };
+						if (is_inrange(firstX, firstY)) {
+							board[firstX][firstY] = j;
+						}
+						else {
+							alive[j] = false;
+						}
 					}
+				}
+				else { // 한칸 이동한 산타 좌표 업데이트
+					board[santa[j].first][santa[j].second] = 0;
+					santa[j] = { nx, ny };
+					board[nx][ny] = j;
 				}
 			}
 		}
+
+		// 각 라운드가 끝나고 탈락하지 않은 산타들은 1점 증가
+		for (int j = 1; j <= p; j++) {
+			if (alive[j]) {
+				point[j]++;
+			}
+		}
+	}
+
+	for (int i = 1; i <= p; i++) {
+		cout << point[i] << " ";
 	}
 
 
