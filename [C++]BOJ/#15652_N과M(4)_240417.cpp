@@ -14,12 +14,10 @@ void dfs(int num, int cnt) {
 		return;
 	}
 	for (int i = num; i <= N; i++) {
-		if (!visited[i]) {
-			visited[i] = true;
-			choose[cnt] = i;
-			dfs(i, cnt + 1);
-			visited[i] = false;
-		}
+		visited[i] = true;
+		choose[cnt] = i;
+		dfs(i, cnt + 1);
+		visited[i] = false;
 	}
 }
 
