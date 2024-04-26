@@ -44,6 +44,7 @@ string combi(int n, int m) {
 		return result;
 
 	// ÆÄ½ºÄ®»ï°¢Çü
+	result = add(combi(n - 1, m - 1), combi(n - 1, m));
 
 	return result;
 }
