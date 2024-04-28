@@ -8,7 +8,7 @@ int n, m;
 string arr[101][101];
 
 string add(string num1, string num2) {
-	int sum;
+	int sum = 0;
 	string result;
 
 	// 1의 자리부터 더하기
