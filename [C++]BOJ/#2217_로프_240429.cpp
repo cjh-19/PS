@@ -7,10 +7,7 @@ int n;
 int input[100000];
 int answer;
 
-int main() {
-	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-
-	cin >> n;
+void solve() {
 	for (int i = 0; i < n; i++) {
 		cin >> input[i];
 	}
@@ -19,6 +16,13 @@ int main() {
 		answer = max(answer, (n - i) * input[i]);
 	}
 	cout << answer;
+}
+
+int main() {
+	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+
+	cin >> n;
+	solve();
 
 	return 0;
 }
