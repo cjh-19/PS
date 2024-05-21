@@ -1,3 +1,5 @@
+// 해시 - set 자료구조 사용
+
 #include <vector>
 #include <set>
 using namespace std;
