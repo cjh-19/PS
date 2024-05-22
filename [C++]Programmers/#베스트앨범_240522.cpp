@@ -38,9 +38,12 @@ vector<int> solution(vector<string> genres, vector<int> plays) {
         }
         map1[max_gen] = 0; // 가장 높은 장르의 횟수 0으로 초기화
 
+        // &i처럼 &를 사용해야 하는 이유: 원본 요소를 직접 참조하여 루프 내에서 요소를 수정하기 위해서이다.
+        // 루프 내에서 정렬하기 때문. "i"를 그냥 사용하게 되면 복사본에 작업하므로 원본 맵에 아무런 변경을 주지 못한다.
         // map2에서 max_gen에 해당하는 vector 정렬 후 1,2 순위 빼기
-        for (auto i : map2) {
+        for (auto &i : map2) {
             if (i.first == max_gen) {
+                // 이것은 맵을 정렬하는 것이 아닌 맵 내부의 vector을 정렬하는 것
                 sort(i.second.begin(), i.second.end(), cmp);
                 answer.push_back(i.second[0].second);
                 if (i.second.size() > 1) { // 장르에 속한 곡이 두개 이상이라면
