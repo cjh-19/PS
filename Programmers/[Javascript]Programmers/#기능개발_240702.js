@@ -1,10 +1,10 @@
 function solution(progresses, speeds) {
-    var answer = [];
+    let answer = [];
     
     // progresses 배열이 빌때까지 반복
     while(progresses.length > 0){
         let count = 0; // 각 배포때 배포되는 기능 개수
-        for(let i=0; progresses.length; i++){
+        for(let i=0; i<progresses.length; i++){
             // 진행률이 100% 미만이라면
             if(progresses[i] < 100)
                 progresses[i] += speeds[i]; // 하루 진행률 추가
@@ -16,7 +16,8 @@ function solution(progresses, speeds) {
             speeds.splice(0,1);
             count++;
         }
-        answer.push(count);
+        if(count>0)
+            answer.push(count);
     }
     return answer;
 }
