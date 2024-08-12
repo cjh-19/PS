@@ -1,5 +1,5 @@
 # Problem Solving
 
-- Algorithm Problem [C++,Python]
+- Algorithm Problem [C++,Python, java, javascript]
 
-BOJ, Programmers, Algorithm Homework
+BOJ, Programmers, Codetree Algorithm Homework
