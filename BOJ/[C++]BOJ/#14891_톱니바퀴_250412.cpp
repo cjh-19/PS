@@ -3,13 +3,16 @@
 using namespace std;
 
 int topni[4][8]; // 12시(0), 1(1), 2(2), 3, 4, 5, 6, 7
+bool visited[4]; // 방문 정보
+bool possible[3]; // 회전 가능 정보
 
 int K;
 
 // num: 회전 톱니 번호, dir: 회전 방향
 // 재귀
-void rotation(int num, int dir, bool visited[4]) {
+void rotation(int num, int dir) {
 	visited[num - 1] = true;
+
 	// 본인 회전
 	// 시계
 	if (dir == 1) {
@@ -37,13 +40,13 @@ void rotation(int num, int dir, bool visited[4]) {
 	}
 
 	// 왼쪽 회전 판단
-	if (num - 1 >= 1 && !visited[num - 2] && topni[num - 1][6] != topni[num - 2][2]) {
-		rotation(num - 1, -1 * dir, visited);
+	if (num - 1 >= 1 && !visited[num - 2] && possible[num - 2]) {
+		rotation(num - 1, -1 * dir);
 	}
 
 	// 오른쪽 회전 판단
-	if (num + 1 <= 4 && !visited[num] && topni[num - 1][2] != topni[num][6]) {
-		rotation(num + 1, -1 * dir, visited);
+	if (num + 1 <= 4 && !visited[num] && possible[num - 1]) {
+		rotation(num + 1, -1 * dir);
 	}
 }
 
@@ -61,9 +64,18 @@ int main() {
 	cin >> K;
 	for (int i = 0; i < K; i++) {
 		int num, dir;
-		bool visited[4] = { false, };
+		fill(visited, visited + 4, false);
+		fill(possible, possible + 3, false);
+
+		// 맞닿은 자석이 다른 경우들만 possible을 true로
+		for (int i = 0; i < 3; i++) {
+			if (topni[i][2] != topni[i + 1][6]) {
+				possible[i] = true;
+			}
+		}
+
 		cin >> num >> dir;
-		rotation(num, dir, visited);
+		rotation(num, dir);
 	}
 
 	// 점수 계산
