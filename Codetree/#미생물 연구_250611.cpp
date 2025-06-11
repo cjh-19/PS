@@ -23,12 +23,10 @@ bool cmp(vector<tuple<int, int, int>> v1, vector<tuple<int, int, int>> v2) {
 // 미생물 지우기
 void microErase(int x, int y, int n) {
     for (int i = 0; i < micro.size(); ) {
-        bool matched = false;
 
         for (int j = 0; j < micro[i].size(); j++) {
             if (get<0>(micro[i][j]) == x && get<1>(micro[i][j]) == y && get<2>(micro[i][j]) == n) {
                 micro[i].erase(micro[i].begin() + j);
-                matched = true;
                 break;
             }
         }
@@ -82,8 +80,7 @@ bool bfs(int num) {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if (nx < 0 || nx >= N || ny < 0 || ny >= N || visited[nx][ny]) continue;
-            if (board[nx][ny] != idx) continue;
+            if (nx < 0 || nx >= N || ny < 0 || ny >= N || visited[nx][ny] || board[nx][ny] != idx) continue;
 
             q.push({ nx, ny });
             visited[nx][ny] = true;
