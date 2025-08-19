@@ -16,7 +16,6 @@ public class Main {
     }
     private static PriorityQueue<Edge> nodepq;
     private static int[] parent;
-    private static int[] size;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -35,10 +34,8 @@ public class Main {
         }
 
         parent = new int[N+1];
-        size = new int[N+1];
         for(int i=0; i<=N; i++) {
             parent[i] = i;
-            size[i] = 1;
         }
 
         // removed[i] = true는 i번과 i+1 사이가 공사중이라는 의미
@@ -53,11 +50,15 @@ public class Main {
             else removed[Math.min(n1, n2)] = true;
         }
 
-        // 남아있는 연결 노드들은 union
+        // 공사를 한 곳에서만 한다면
+        if(M <= 1) {
+            System.out.print("YES");
+            return;
+        }
+
+        // 남아있는 연결 노드들은 가중치 0으로 추가
         for(int i=1; i<=N; i++) {
-            int n1 = i;
-            int n2 = (i==N ? 1 : i+1);
-            if(!removed[i]) union(n1, n2);
+            if(!removed[i]) nodepq.offer(new Edge(i, (i==N ? 1 : i+1), 0));
         }
 
         // nodepq에 있는 간선들로 kruskal 진행
@@ -78,13 +79,8 @@ public class Main {
         if(n1 == n2) return;
 
         // 와우도와의 연결이라면
-        if((n1 == 0) || (size[n2] < size[n1])) {
-            size[n1] += size[n2];
-            parent[n2] = n1;
-        } else if((n2 == 0) || (size[n1] <= size[n2])) {
-            size[n2] += size[n1];
-            parent[n1] = n2;
-        }
+        if(parent[n1] < parent[n2]) parent[n2] = n1;
+        else parent[n1] = n2;
     }
 
     private static boolean kruskal() {
@@ -96,23 +92,15 @@ public class Main {
             int n2 = edge.n2;
             int w = edge.weight;
 
-            // 항상 n1=0, n2=i
-            int root0 = find(0);
-            int root2 = find(n2);
+            if(find(n1) == find(n2)) continue;
 
-            if(n1 == n2) continue;
-
-            union(root0, root2);
+            union(n1, n2);
             weightSum += w;
             if(weightSum > K) return false;
 
-            if(check()) return true;
         }
-        return check();
+
+        return weightSum <= K;
     }
 
-    private static boolean check() {
-        int root = find(0);
-        return size[root] == N+1; // N+1개 노드가 연결 되었는지
-    }
 }
