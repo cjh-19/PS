@@ -56,7 +56,7 @@ class Solution {
         roll(0, 0, bDice, dice, bCombi);
         
         // A가 뽑은 주사위의 합 조합에 대해서 B가 뽑은 합 조합과 비교하여 승이 몇번있는지 세기
-        game(aCombi, bCombi);
+        game();
         
         return;
     }
@@ -74,15 +74,15 @@ class Solution {
         }
     }
     
-    private static void game(List<Integer> aCombi, List<Integer> bCombi) {
+    private static void game() {
         // bCombi를 정렬시키고 aCombi에서 하나씩 뽑아서 bCombi에 대해서 이분탐색
         Collections.sort(bCombi);
         for(int sum : aCombi) {
-            aWin += lowerBound(bCombi, sum);
+            aWin += lowerBound(sum);
         }
     }
     
-    private static int lowerBound(List<Integer> bCombi, int sum) {
+    private static int lowerBound(int sum) {
         int s = 0, e = bCombi.size();
         while(s < e) {
             int mid = (s+e)/2;
