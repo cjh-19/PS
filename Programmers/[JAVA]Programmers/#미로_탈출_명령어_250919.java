@@ -43,11 +43,9 @@ class Solution {
             int ypos = info.y;
             int dist = info.dist;
             
-            if(xpos == r && ypos == c) {
-                if(k==dist) {
-                    answer = info.sb.toString();
-                    return;
-                }
+            if(xpos == r && ypos == c && k==dist) {
+                answer = info.sb.toString();
+                return;
             }
             if(k<=dist) continue;
             
@@ -56,10 +54,6 @@ class Solution {
                 int ny = ypos + dy[d];
                 
                 if(!valid(nx, ny) || visited[nx][ny][dist+1]) continue;
-                
-                int rest = k - (dist + 1);
-                int mind = Math.abs(nx - r) + Math.abs(ny - c);
-                if (mind > rest || ((rest - mind) & 1) == 1) continue;
                 
                 StringBuilder nsb = new StringBuilder();
                 nsb.append(info.sb.toString());
