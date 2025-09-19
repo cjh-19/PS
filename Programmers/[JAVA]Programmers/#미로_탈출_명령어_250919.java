@@ -1,3 +1,56 @@
+// 그리디 방식
+import java.util.*;
+import java.io.*;
+
+class Solution {
+    private static int[] dx = {1, 0, 0, -1};
+    private static int[] dy = {0, -1, 1, 0};
+    private static String[] dd = {"d", "l", "r", "u"};
+    private static int N, M;
+    
+    public String solution(int n, int m, int x, int y, int r, int c, int k) {
+        this.N=n; this.M=m;
+        
+        int minDist = Math.abs(x - r) + Math.abs(y - c);
+        if (minDist > k || ((k - minDist)%2) == 1) return "impossible";
+        
+        return move(x, y, r, c, k);
+    }
+    
+    private static String move(int x, int y, int r, int c, int k) {
+        StringBuilder sb = new StringBuilder();
+        int cx = x, cy = y;
+        
+        for(int step=1; step<=k; step++) {
+            boolean moved = false;
+            for(int d=0; d<4; d++) {
+                int nx = cx + dx[d];
+                int ny = cy + dy[d];
+                if(!valid(nx, ny)) continue;
+                
+                int restDist = k - step;
+                int minDist = Math.abs(nx-r) + Math.abs(ny-c);
+                if(minDist <= restDist && (restDist-minDist)%2==0) {
+                    sb.append(dd[d]);
+                    cx=nx;
+                    cy=ny;
+                    moved=true;
+                    break;
+                }
+            }
+            if(!moved) return "impossible";
+        }
+        return sb.toString();
+    }
+    
+    private static boolean valid(int x, int y) {
+        return x>=1 && x<=N && y>=1 && y<=M;
+    }
+}
+
+
+// 최대 3500ms & 400MB 풀이 -> 비효율
+/*
 import java.util.*;
 import java.io.*;
 
@@ -69,3 +122,4 @@ class Solution {
         return x>=1 && x<=N && y>=1 && y<=M;
     }
 }
+*/
