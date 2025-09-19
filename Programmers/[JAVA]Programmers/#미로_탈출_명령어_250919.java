@@ -33,7 +33,9 @@ class Solution {
     
     private static void bfs(int x, int y, int r, int c, int k) {
         Queue<Node> q = new ArrayDeque<>();
+        boolean[][][] visited = new boolean[N+1][M+1][k+1];
         q.offer(new Node(x,y, 0, new StringBuilder()));
+        visited[x][y][0] = true;
         
         while(!q.isEmpty()) {
             Node info = q.poll();
@@ -53,7 +55,7 @@ class Solution {
                 int nx = xpos + dx[d];
                 int ny = ypos + dy[d];
                 
-                if(!valid(nx, ny)) continue;
+                if(!valid(nx, ny) || visited[nx][ny][dist+1]) continue;
                 
                 int rest = k - (dist + 1);
                 int mind = Math.abs(nx - r) + Math.abs(ny - c);
@@ -64,6 +66,7 @@ class Solution {
                 nsb.append(dd[d]);
                 
                 q.offer(new Node(nx, ny, dist+1, nsb));
+                visited[nx][ny][dist+1] = true;
             }
         }
     }
