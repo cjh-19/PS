@@ -11,6 +11,56 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         K = Integer.parseInt(st.nextToken());
 
+        bfs01();
+    }
+
+    private static void bfs01() {
+        final int maxV = 100_001;
+        ArrayDeque<Integer> dq = new ArrayDeque<>();
+        int[] dist = new int[maxV];
+        Arrays.fill(dist, maxV);
+        dq.push(N);
+        dist[N] = 0;
+
+        while(!dq.isEmpty()) {
+            int pos = dq.pollFirst();
+            if(pos==K) break;
+
+            if(pos+1<maxV && dist[pos+1] > dist[pos]+1) {
+                dq.addLast(pos+1);
+                dist[pos+1] = dist[pos]+1;
+            }
+            if(pos-1>=0 && dist[pos-1] > dist[pos]+1) {
+                dq.addLast(pos-1);
+                dist[pos-1] = dist[pos]+1;
+            }
+            if(pos*2<maxV && dist[pos*2] > dist[pos]) {
+                dq.addFirst(pos*2);
+                dist[pos*2] = dist[pos];
+            }
+        }
+
+        System.out.print(dist[K]);
+    }
+}
+
+
+
+
+/*
+import java.util.*;
+import java.io.*;
+
+public class Main {
+    private static int N, K;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+
         dijkstra();
     }
 
@@ -48,3 +98,4 @@ public class Main {
         System.out.print(dist[K]);
     }
 }
+*/
